@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>RegistroForm</title>
+</head>
+<body>
+    <h1> Registro de usuarios </h1>
+    <link rel="stylesheet" href="Css/estilos.css">
+    <nav>
+        <ul>
+            <li><a href="usuario.html">Registro de voluntario</a></li>
+            <li><a href="avistamiento.html">Registrar avistamiento</a></li>
+            <li><a href="listado.html">Listado de avistamientos</a></li>
+            <li><a href="graficos.html">Indicadores y métricas</a></li>
+        </ul>
+    </nav>
+    <form id="registro">
+        <div>
+            <label> Nombre:<br><input type="text" id="nombre"></label>
+            <span class="error" id = "error-nombre"></span>
+        </div>
+
+        <div>
+            <label for="region">Región:</label><br>
+            <select id="region">
+                <option value="">-- Seleccione --</option>
+                <option value="arica-parinacota">Arica y Parinacota</option>
+                <option value="tarapaca">Tarapacá</option>
+                <option value="antofagasta">Antofagasta</option>
+                <option value="atacama">Atacama</option>
+                <option value="coquimbo">Coquimbo</option>
+                <option value="valparaiso">Valparaíso</option>
+                <option value="metropolitana">Metropolitana de Santiago</option>
+                <option value="ohiggins">Libertador General Bernardo O'Higgins</option>
+                <option value="maule">Maule</option>
+                <option value="nuble">Ñuble</option>
+                <option value="biobio">Biobío</option>
+                <option value="araucania">La Araucanía</option>
+                <option value="los-rios">Los Ríos</option>
+                <option value="los-lagos">Los Lagos</option>
+                <option value="aysen">Aysén del General Carlos Ibáñez del Campo</option>
+                <option value="magallanes">Magallanes y de la Antártica Chilena</option>
+            </select>
+            <span class="error" id = "error-region"></span>
+        </div>
+
+        <div>
+            <label> comuna: <br><input type="text" id = "comuna"></label>
+            <span class="error" id = "error-comuna"></span>
+        </div>
+
+        <div>
+            <label> Email: <br><input type="email" id = "email"></label>
+            <span class="error" id = "error-mail"></span>
+        </div>
+
+        <br>
+        <button type="submit">Registrarse</button>
+    </form>
+
+    <script src="Javascript/validaciones.js"></script>
+</body>
+</html>

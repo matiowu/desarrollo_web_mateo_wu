@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>AvistamientoForm</title>
+    <link rel="stylesheet" href="Css/estilos.css">
+</head>
+<body>
+    <h1> Registre su avistamiento </h1>
+    <nav>
+        <ul>
+            <li><a href="usuario.html">Registro de voluntario</a></li>
+            <li><a href="avistamiento.html">Registrar avistamiento</a></li>
+            <li><a href="listado.html">Listado de avistamientos</a></li>
+            <li><a href="graficos.html">Indicadores y métricas</a></li>
+        </ul>
+    </nav>
+    <form id="avistamiento">
+        <div>
+            <label> Fecha: <br><input type="date" id="fecha"></label>
+            <span class="error" id = "error-fecha"></span>
+        </div>
+
+        <div>
+            <label> Hora: <br><input type="time" id="hora"></label>
+            <span class="error" id = "error-hora"></span>
+        </div>
+
+        <div>
+            <label> Lugar: <br><input type="text" id="lugar"></label>
+            <span class="error" id = "error-lugar"></span>
+        </div>
+
+        <div>
+            <label for="tipo-ave">Tipo de ave:</label><br>
+            <select id="tipo-ave">
+                <option value="">-- Seleccione --</option>
+                <option value="rapaz">Rapaz</option>
+                <option value="acuatica">Acuática</option>
+                <option value="paseriforme">Paseriforme (canora)</option>
+                <option value="zancuda">Zancuda</option>
+                <option value="marina">Marina</option>
+                <option value="otra">Otra</option>
+            </select>
+            <span class="error" id="error-tipo-ave"></span>
+        </div>
+
+        <div>
+            <label for="nombre-ave">Nombre del ave:</label><br>
+            <input type="text" id="nombre-ave">
+            <span class="error" id="error-nombre-ave"></span>
+        </div>
+
+        <div>
+            <label for="archivo">Foto o video del avistamiento:</label><br>
+            <input type="file" id="archivo" accept="image/*,video/*">
+            <span class="error" id="error-archivo"></span>
+        </div>
+
+        <div>
+            <label> Cantidad: <br><input type="number" id="cantidad"></label>
+            <span class="error" id = "error-cantidad"></span>
+        </div>
+
+        <br>
+        <button type="submit">Registrar avistamiento</button>
+    </form>
+
+    <script src="Javascript/validaciones-avistamientos.js"></script>
+</body>
+</html>
