@@ -18,7 +18,7 @@
 
    python3 -m venv venv
    source venv/bin/activate  # En Linux/macOS
-   # En Windows: venv\Scripts\activate
+   En Windows: venv\Scripts\activate
 
 -. Instalación de dependencias
 
