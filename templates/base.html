@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block titulo %}Avistamientos{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+</head>
+<body>
+<nav>
+    <ul>
+        <li><a href="{{ url_for('index') }}" class="boton">Volver al inicio</a></li>
+        <li><a href="{{ url_for('registrar_voluntario') }}">Registro de voluntario</a></li>
+        <li><a href="{{ url_for('registrar_avistamiento') }}">Registrar avistamiento</a></li>
+        <li><a href="{{ url_for('listado_avistamientos') }}">Listado de avistamientos</a></li>
+        <li><a href="{{ url_for('metricas') }}">Indicadores y métricas</a></li>
+    </ul>
+</nav>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div class="mensajes">
+    {% for category, message in messages %}
+    <p class="alerta {{ category }}">{{ message }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+
+{% block contenido %}{% endblock %}
+
+{% block scripts %}{% endblock %}
+</body>
+</html>

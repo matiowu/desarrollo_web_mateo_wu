@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block titulo %}Listado de avistamientos{% endblock %}
+
+{% block contenido %}
+<h1>Listado de avistamientos</h1>
+
+<div>
+    <a href="{{ url_for('listado_avistamientos', orden='fecha') }}">Ordenar por fecha</a> |
+    <a href="{{ url_for('listado_avistamientos', orden='lugar') }}">Ordenar por lugar</a>
+</div>
+
+<section id="lista">
+    <h2>Avistamientos:</h2>
+    <ul>
+        {% for a in paginacion.items %}
+        <li>
+            <a href="{{ url_for('detalle_avistamiento', id=a.id) }}" class="avistamiento-item">
+                <span class="nombre">{{ a.ave.nombre }}</span>
+                <span class="fecha">— {{ a.fecha_hora.strftime('%d/%m/%Y %H:%M') }}</span>
+                <span class="lugar">en {{ a.lugar }}</span>
+                <span class="voluntario">(reportó {{ a.voluntario.nombre }})</span>
+            </a>
+        </li>
+        {% else %}
+        <li>No hay avistamientos para mostrar.</li>
+        {% endfor %}
+    </ul>
+</section>
+
+<div>
+    {% if paginacion.has_prev %}
+    <a href="{{ url_for('listado_avistamientos', pagina=paginacion.prev_num, orden=orden) }}">Anterior</a>
+    {% endif %}
+    Página {{ paginacion.page }} de {{ paginacion.pages }}
+    {% if paginacion.has_next %}
+    <a href="{{ url_for('listado_avistamientos', pagina=paginacion.next_num, orden=orden) }}">Siguiente</a>
+    {% endif %}
+</div>
+{% endblock %}

@@ -65,3 +65,13 @@ body div {
     height: 20px;
     background-color: #6f4e37;
 }
+
+.error {
+    display: none;
+    color: #b00020;
+    font-size: 0.85rem;
+    margin-top: 0.2rem;
+}
+.error.visible {
+    display: block;
+}

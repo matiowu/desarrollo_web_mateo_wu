@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block titulo %}Indicadores y métricas{% endblock %}
+
+{% block contenido %}
+<h1>Gráficos de avistamientos</h1>
+
+<h2>Total avistamientos: <span id="total-avistamientos"></span></h2>
+
+<section id="grafico">
+    <h3>Avistamientos por tipo de ave:</h3>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/metricas.js') }}"></script>
+{% endblock %}

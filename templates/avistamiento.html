@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block titulo %}Registrar avistamiento{% endblock %}
+
+{% block contenido %}
+<h1>Registre su avistamiento</h1>
+
+<form id="avistamiento" method="POST" action="{{ url_for('registrar_avistamiento') }}" enctype="multipart/form-data">
+
+    <div>
+        <label for="voluntario_id">Voluntario que reporta:</label><br>
+        <select id="voluntario_id" name="voluntario_id">
+            <option value="">-- Seleccione voluntario --</option>
+            {% for v in voluntarios %}
+            <option value="{{ v.id }}" {% if datos.get('voluntario_id')|string == v.id|string %}selected{% endif %}>{{ v.nombre }}</option>
+            {% endfor %}
+        </select>
+        <span class="error{% if errores.get('voluntario') %} visible{% endif %}" id="error-voluntario">{{ errores.get('voluntario', '') }}</span>
+    </div>
+
+    <div>
+        <label for="fecha">Fecha:</label><br>
+        <input type="date" id="fecha" name="fecha" value="{{ datos.get('fecha', '') }}">
+        <span class="error{% if errores.get('fecha') %} visible{% endif %}" id="error-fecha">{{ errores.get('fecha', '') }}</span>
+    </div>
+
+    <div>
+        <label for="hora">Hora:</label><br>
+        <input type="time" id="hora" name="hora" value="{{ datos.get('hora', '') }}">
+        <span class="error{% if errores.get('hora') %} visible{% endif %}" id="error-hora">{{ errores.get('hora', '') }}</span>
+    </div>
+
+    <div>
+        <label for="lugar">Lugar:</label><br>
+        <input type="text" id="lugar" name="lugar" maxlength="200" value="{{ datos.get('lugar', '') }}">
+        <span class="error{% if errores.get('lugar') %} visible{% endif %}" id="error-lugar">{{ errores.get('lugar', '') }}</span>
+    </div>
+
+    <div>
+        <label for="ave_id">Ave avistada:</label><br>
+        <select id="ave_id" name="ave_id">
+            <option value="">-- Seleccione ave --</option>
+            {% for ave in aves %}
+            <option value="{{ ave.id }}" {% if datos.get('ave_id')|string == ave.id|string %}selected{% endif %}>{{ ave.nombre }}</option>
+            {% endfor %}
+        </select>
+        <span class="error{% if errores.get('ave') %} visible{% endif %}" id="error-ave">{{ errores.get('ave', '') }}</span>
+    </div>
+
+    <div>
+        <label for="descripcion">Descripción / observaciones:</label><br>
+        <textarea id="descripcion" name="descripcion" rows="4" cols="50" maxlength="500">{{ datos.get('descripcion', '') }}</textarea>
+        <span class="error{% if errores.get('descripcion') %} visible{% endif %}" id="error-descripcion">{{ errores.get('descripcion', '') }}</span>
+    </div>
+
+    <div>
+        <label for="archivos">Fotos o videos del avistamiento (puede seleccionar varios):</label><br>
+        <input type="file" id="archivos" name="archivos" accept="image/*,video/*" multiple>
+        <span class="error{% if errores.get('archivos') %} visible{% endif %}" id="error-archivo">{{ errores.get('archivos', '') }}</span>
+    </div>
+
+    <br>
+    <button type="submit">Registrar avistamiento</button>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/validaciones-avistamientos.js') }}"></script>
+{% endblock %}

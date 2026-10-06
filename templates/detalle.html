@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block titulo %}Detalle del avistamiento{% endblock %}
+
+{% block contenido %}
+<h1>{{ a.ave.nombre }}</h1>
+
+<ul>
+    <li><strong>Fecha y hora:</strong> {{ a.fecha_hora.strftime('%d/%m/%Y %H:%M') }}</li>
+    <li><strong>Lugar:</strong> {{ a.lugar }}</li>
+    <li><strong>Reportado por:</strong> {{ a.voluntario.nombre }}</li>
+    <li><strong>Descripción:</strong> {{ a.descripcion or 'Sin descripción' }}</li>
+</ul>
+
+<h2>Fotos y videos</h2>
+{% for r in a.registros %}
+{% if r.ruta_archivo.endswith('.mp4') or r.ruta_archivo.endswith('.webm') %}
+<video controls width="400">
+    <source src="{{ url_for('static', filename=r.ruta_archivo) }}">
+    Tu navegador no soporta reproducción de video.
+</video>
+{% else %}
+<img src="{{ url_for('static', filename=r.ruta_archivo) }}" alt="{{ r.nombre_archivo }}" width="300">
+{% endif %}
+{% endfor %}
+
+<p><a href="{{ url_for('listado_avistamientos') }}">Volver al listado</a></p>
+{% endblock %}

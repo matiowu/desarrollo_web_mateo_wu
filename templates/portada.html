@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block titulo %}Inicio{% endblock %}
+
+{% block contenido %}
+<h1>Bienvenido a la Unión de Ornitólogos de Chile</h1>
+<p>Registra tus avistamientos de aves y colabora con la ciencia ciudadana.</p>
+
+<h2>Últimos avistamientos</h2>
+<ul>
+    {% for a in ultimos %}
+    <li>
+        <a href="{{ url_for('detalle_avistamiento', id=a.id) }}" class="avistamiento-item">
+            <span class="nombre">{{ a.ave.nombre }}</span>
+            <span class="fecha">— {{ a.fecha_hora.strftime('%d/%m/%Y %H:%M') }}</span>
+            <span class="lugar">en {{ a.lugar }}</span>
+        </a>
+    </li>
+    {% else %}
+    <li>Aún no hay avistamientos registrados.</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

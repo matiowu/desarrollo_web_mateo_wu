@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block titulo %}Voluntario registrado{% endblock %}
+
+{% block contenido %}
+<h1>Gracias por registrarse</h1>
+
+<div>
+    <p><strong>Voluntario registrado exitosamente:</strong></p>
+    <ul>
+        <li><strong>Nombre:</strong> {{ voluntario.nombre }}</li>
+        <li><strong>Email:</strong> {{ voluntario.email }}</li>
+        <li><strong>Teléfono:</strong> {{ voluntario.telefono }}</li>
+        <li><strong>Comuna:</strong> {{ voluntario.comuna.nombre }}</li>
+        <li><strong>Región:</strong> {{ voluntario.comuna.region.nombre }}</li>
+        <li><strong>Fecha de registro:</strong> {{ voluntario.fecha_registro.strftime('%d/%m/%Y %H:%M') }}</li>
+    </ul>
+</div>
+
+<div>
+    <h2>¿Qué deseas hacer ahora?</h2>
+    <p>
+        <a href="{{ url_for('registrar_avistamiento', voluntario_id=voluntario.id) }}" class="boton">Registrar un avistamiento para este voluntario</a>
+    </p>
+    <p>
+        <a href="{{ url_for('index') }}" class="boton">Volver al inicio</a>
+    </p>
+</div>
+{% endblock %}
