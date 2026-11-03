@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import select
+from sqlalchemy import func, select
 
 db = SQLAlchemy()
 
@@ -55,6 +55,14 @@ class Registro(db.Model):
     nombre_archivo = db.Column(db.String(300), nullable=False)
     avistamiento_id = db.Column(db.Integer, db.ForeignKey("avistamiento.id"), nullable=False)
 
+class Comentario(db.Model):
+    __tablename__ = "comentario"
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(80), nullable=False)
+    texto = db.Column(db.String(300), nullable=False)
+    fecha = db.Column(db.DateTime, nullable=False)
+    avistamiento_id = db.Column(db.Integer, db.ForeignKey("avistamiento.id"), nullable=False)
+
 def get_regiones():
     return db.session.scalars(select(Region).order_by(Region.id)).all()
 
@@ -93,8 +101,55 @@ def get_avistamiento_or_404(avistamiento_id):
     return db.get_or_404(Avistamiento, avistamiento_id)
 
 
-def create_voluntario(datos):
+def get_avistamientos_por_dia():
+    dia = func.date(Avistamiento.fecha_hora)
+    filas = db.session.execute(
+        select(dia, func.count(Avistamiento.id)).group_by(dia).order_by(dia)
+    ).all()
+    return [(str(f[0]), f[1]) for f in filas]
 
+
+def get_avistamientos_por_ave():
+    filas = db.session.execute(
+        select(Ave.nombre, func.count(Avistamiento.id))
+        .join(Avistamiento, Avistamiento.ave_id == Ave.id)
+        .group_by(Ave.id, Ave.nombre)
+        .order_by(Ave.nombre)
+    ).all()
+
+    return [(f[0], f[1]) for f in filas]
+
+
+def get_voluntarios_por_comuna():
+    filas = db.session.execute(
+        select(Comuna.nombre, func.count(Voluntario.id))
+        .join(Voluntario, Voluntario.comuna_id == Comuna.id)
+        .group_by(Comuna.id, Comuna.nombre)
+        .order_by(Comuna.nombre)
+    ).all()
+
+    return [(f[0], f[1]) for f in filas]
+
+def get_comentarios(avistamiento_id):
+    return db.session.scalars(
+        select(Comentario)
+        .where(Comentario.avistamiento_id == avistamiento_id)
+        .order_by(Comentario.fecha.desc(), Comentario.id.desc())
+    ).all()
+
+
+def create_comentario(datos):
+    try:
+        comentario = Comentario(**datos)
+        db.session.add(comentario)
+        db.session.commit()
+        return comentario
+    except Exception:
+        db.session.rollback()
+        raise
+
+
+def create_voluntario(datos):
     try:
         voluntario = Voluntario(**datos)
         db.session.add(voluntario)
@@ -106,7 +161,6 @@ def create_voluntario(datos):
 
 
 def create_avistamiento(datos, registros):
-
     try:
         avistamiento = Avistamiento(**datos)
         db.session.add(avistamiento)
@@ -118,4 +172,3 @@ def create_avistamiento(datos, registros):
     except Exception:
         db.session.rollback()
         raise
-

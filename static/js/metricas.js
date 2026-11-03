@@ -1,132 +1,36 @@
-const avistamientosEjemplos = [
-{
-    tipoAve: 'rapaz',
-    nombreAve: 'Águila',
-    lugar: 'Montaña',
-    cantidad: 1,
-    hora: '10:00',
-    fecha: '2023-10-01'
-},
-{
-    tipoAve: 'acuatica',
-    nombreAve: 'Pato',
-    lugar: 'Lago',
-    cantidad: 5,
-    hora: '14:30',
-    fecha: '2023-10-02'
-},
-{
-    tipoAve: 'paseriforme',
-    nombreAve: 'Canario',
-    lugar: 'Jardín',
-    cantidad: 3,
-    hora: '09:15',
-    fecha: '2023-10-03'
-},
-{
-    tipoAve: 'paseriforme',
-    nombreAve: 'Canario',
-    lugar: 'Lago',
-    cantidad: 6,
-    hora: '09:15',
-    fecha: '2022-02-25'
-},
-{
-    tipoAve: 'rapaz',
-    nombreAve: 'Águila',
-    lugar: 'Montaña',
-    cantidad: 1,
-    hora: '10:00',
-    fecha: '2023-10-01'
-},
-{
-    tipoAve: 'acuatica',
-    nombreAve: 'Pato',
-    lugar: 'Lago',
-    cantidad: 5,
-    hora: '14:30',
-    fecha: '2023-10-02'
-},
-{
-    tipoAve: 'paseriforme',
-    nombreAve: 'Canario',
-    lugar: 'Jardín',
-    cantidad: 3,
-    hora: '09:15',
-    fecha: '2023-10-03'
-},
-{
-    tipoAve: 'paseriforme',
-    nombreAve: 'Canario',
-    lugar: 'Lago',
-    cantidad: 6,
-    hora: '09:15',
-    fecha: '2022-02-25'
-},
-{
-    tipoAve: 'rapaz',
-    nombreAve: 'Águila',
-    lugar: 'Montaña',
-    cantidad: 1,
-    hora: '10:00',
-    fecha: '2023-10-01'
-},
-{
-    tipoAve: 'acuatica',
-    nombreAve: 'Pato',
-    lugar: 'Lago',
-    cantidad: 5,
-    hora: '14:30',
-    fecha: '2023-10-02'
-},
-{
-    tipoAve: 'paseriforme',
-    nombreAve: 'Canario',
-    lugar: 'Jardín',
-    cantidad: 3,
-    hora: '09:15',
-    fecha: '2023-10-03'
-},
-{
-    tipoAve: 'paseriforme',
-    nombreAve: 'Canario',
-    lugar: 'Lago',
-    cantidad: 6,
-    hora: '09:15',
-    fecha: '2022-02-25'
+async function pedirDatos(id) {
+    const url = document.getElementById(id).dataset.url;
+    const respuesta = await fetch(url);
+    return await respuesta.json();
 }
 
-]
+async function dibujarGraficos() {
+    const dia = await pedirDatos("grafico-dia");
+    document.getElementById("total-avistamientos").textContent = dia.valores.reduce((a, b) => a + b, 0);
+    Highcharts.chart("grafico-dia", {
+        chart: { type: "line" },
+        title: { text: "Avistamientos por día" },
+        xAxis: { categories: dia.labels, title: { text: "Día" } },
+        yAxis: { allowDecimals: false, title: { text: "Cantidad de avistamientos" } },
+        series: [{ name: "Avistamientos", data: dia.valores }]
+    });
 
-document.getElementById('total-avistamientos').textContent = avistamientosEjemplos.length;
+    const ave = await pedirDatos("grafico-ave");
+    Highcharts.chart("grafico-ave", {
+        chart: { type: "pie" },
+        title: { text: "Avistamientos por tipo de ave" },
+        series: [{ name: "Avistamientos", data: ave.labels.map((nombre, i) => [nombre, ave.valores[i]]) }]
+    });
 
-const totalPorTipo = {};
-
-for (const i of avistamientosEjemplos) {
-    if (totalPorTipo[i.tipoAve]) {
-        totalPorTipo[i.tipoAve]++;
-    } else {
-        totalPorTipo[i.tipoAve] = 1;
-    }
+    const comuna = await pedirDatos("grafico-comuna");
+    Highcharts.chart("grafico-comuna", {
+        chart: { type: "column" },
+        title: { text: "Voluntarios por comuna" },
+        xAxis: { categories: comuna.labels, title: { text: "Comuna" } },
+        yAxis: { allowDecimals: false, title: { text: "Cantidad de voluntarios" } },
+        legend: { enabled: false },
+        series: [{ name: "Voluntarios", data: comuna.valores }]
+    });
 }
 
-const grafico = document.getElementById('grafico');
-
-for (const i in totalPorTipo) {
-    const cantidad = totalPorTipo[i];
-
-    const fila = document.createElement('div');
-    fila.className = 'fila-grafico';
-
-    const etiqueta = document.createElement('span');
-    etiqueta.className = 'etiqueta-barra';
-    etiqueta.textContent = i + ' (' + cantidad + ')';
-
-    const barra = document.createElement('div');
-    barra.className = 'barra';
-    barra.style.width = (cantidad * 40) + 'px';
-
-    fila.appendChild(etiqueta);
-    fila.appendChild(barra);
-    grafico.appendChild(fila);
-}
+dibujarGraficos();

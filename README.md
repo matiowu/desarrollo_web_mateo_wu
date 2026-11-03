@@ -33,3 +33,10 @@ mysql -u root -p < tarea2.sql
 -. La aplicación utiliza la siguiente URI de conexión configurada en app.py:
 
 mysql+pymysql://cc5002:programacionweb@localhost:3306/tarea2
+
+## Tarea 3
+
+### Consideraciones al momento de corregir:
+
+- Se uso highcharts para la creacion de los graficos.
+- Se uso la misma base de datos de la tarea 2, es importante que primero se creen las tablas de aves.sql, region-comuna.sql y tarea2.sql antes que tabla-comentario.sql, ya que esta ultima depende de las anteriores

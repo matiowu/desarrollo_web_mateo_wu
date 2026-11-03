@@ -3,15 +3,17 @@ import re
 import uuid
 from datetime import date, datetime, timedelta
 
-from flask import Flask, flash, redirect, render_template, request, url_for
+from flask import Flask, flash, jsonify, redirect, render_template, request, url_for
 from werkzeug.utils import secure_filename
 
 from database import (
     db,
-    create_avistamiento, create_voluntario,
+    create_avistamiento, create_comentario, create_voluntario,
     get_aves, get_avistamiento_or_404, get_avistamientos_pagina,
-    get_comuna, get_comunas, get_regiones,
+    get_avistamientos_por_ave, get_avistamientos_por_dia,
+    get_comentarios, get_comuna, get_comunas, get_regiones,
     get_ultimos_avistamientos, get_voluntario, get_voluntario_or_404, get_voluntarios,
+    get_voluntarios_por_comuna,
 )
 
 app = Flask(__name__)
@@ -133,6 +135,24 @@ def validar_avistamiento(form, archivos):
 
     return errores, limpio
 
+def validar_comentario(form):
+    errores, limpio = {}, {}
+
+    nombre = form.get("nombre", "").strip()
+    if not 3 <= len(nombre) <= 50:
+        errores["nombre"] = "El nombre debe tener entre 3 y 50 caracteres."
+    else:
+        limpio["nombre"] = nombre
+
+    texto = form.get("texto", "").strip()
+    if not 5 <= len(texto) <= 300:
+        errores["texto"] = "El comentario debe tener entre 5 y 300 caracteres."
+    else:
+        limpio["texto"] = texto
+
+    return errores, limpio
+
+
 def guardar_archivos(archivos):
     guardados = []
     for archivo in archivos:
@@ -222,11 +242,58 @@ def detalle_avistamiento(id):
     return render_template("detalle.html", a=get_avistamiento_or_404(id))
 
 
+@app.route("/avistamiento/<int:id>/comentarios", methods=["GET", "POST"])
+def comentarios_avistamiento(id):
+    avistamiento = get_avistamiento_or_404(id)
+
+    if request.method == "GET":
+        return jsonify([
+            {
+                "fecha": c.fecha.strftime("%d/%m/%Y %H:%M"),
+                "nombre": c.nombre,
+                "texto": c.texto,
+            }
+            for c in get_comentarios(avistamiento.id)
+        ])
+
+    errores, limpio = validar_comentario(request.form)
+    if errores:
+        return jsonify({"errores": errores}), 400
+
+    try:
+        create_comentario({**limpio, "fecha": datetime.now(), "avistamiento_id": avistamiento.id})
+    except Exception:
+        return jsonify({"errores": {"general": "Ocurrió un error al guardar el comentario."}}), 500
+
+    return jsonify({"ok": True}), 201
+
+
 @app.route("/metricas")
 def metricas():
     return render_template("graficos.html")
 
 
+def datos_grafico(filas):
+    return jsonify({
+        "labels": [f[0] for f in filas],
+        "valores": [f[1] for f in filas],
+    })
+
+
+@app.route("/api/avistamientos-por-dia")
+def api_avistamientos_por_dia():
+    return datos_grafico(get_avistamientos_por_dia())
+
+
+@app.route("/api/avistamientos-por-ave")
+def api_avistamientos_por_ave():
+    return datos_grafico(get_avistamientos_por_ave())
+
+
+@app.route("/api/voluntarios-por-comuna")
+def api_voluntarios_por_comuna():
+    return datos_grafico(get_voluntarios_por_comuna())
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
-

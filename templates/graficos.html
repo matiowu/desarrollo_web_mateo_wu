@@ -7,11 +7,25 @@
 
 <h2>Total avistamientos: <span id="total-avistamientos"></span></h2>
 
-<section id="grafico">
-    <h3>Avistamientos por tipo de ave:</h3>
+<section>
+    <h3>Avistamientos por día</h3>
+    <div id="grafico-dia" class="grafico" data-url="{{ url_for('api_avistamientos_por_dia') }}"></div>
 </section>
+
+<section>
+    <h3>Avistamientos por tipo de ave</h3>
+    <div id="grafico-ave" class="grafico" data-url="{{ url_for('api_avistamientos_por_ave') }}"></div>
+</section>
+
+<section>
+    <h3>Voluntarios por comuna</h3>
+    <div id="grafico-comuna" class="grafico" data-url="{{ url_for('api_voluntarios_por_comuna') }}"></div>
+</section>
+
+<p><a href="{{ url_for('index') }}">Volver a la portada</a></p>
 {% endblock %}
 
 {% block scripts %}
+<script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="{{ url_for('static', filename='js/metricas.js') }}"></script>
 {% endblock %}
