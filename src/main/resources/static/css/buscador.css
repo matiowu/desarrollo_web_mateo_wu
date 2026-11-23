@@ -1,0 +1,67 @@
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    padding: 0;
+}
+
+nav a {
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+}
+
+h1 {
+    text-align: center;
+}
+
+form {
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+form div {
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+form input {
+    width: 100%;
+    padding: 0.4rem;
+}
+
+body {
+    background-color: #f0e6d2;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+body div {
+    margin-bottom: 0.5rem;
+}
+
+#resultados {
+    overflow-x: auto;
+}
+
+table {
+    margin: 0 auto;
+    border-collapse: collapse;
+    background-color: white;
+}
+
+th, td {
+    border: 1px solid #6f4e37;
+    padding: 0.4rem 0.6rem;
+}
+
+th {
+    background-color: #6f4e37;
+    color: white;
+}
+
+mark {
+    background-color: #ffd966;
+}
